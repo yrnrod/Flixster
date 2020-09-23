@@ -91,11 +91,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             //1. Register click listener on the whole row
             //2. Navigate to a new activity on tap
 
-            tvTitle.setOnClickListener(new View.OnClickListener() {
+            container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Goes to a new activity on tap.
                     Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("title", movie.getTitle());
                     i.putExtra("movie", Parcels.wrap(movie));
                     context.startActivity(i);
                 }
