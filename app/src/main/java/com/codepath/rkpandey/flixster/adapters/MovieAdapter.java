@@ -1,19 +1,26 @@
 package com.codepath.rkpandey.flixster.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.rkpandey.flixster.R;
+import com.codepath.rkpandey.flixster.model.DetailActivity;
 import com.codepath.rkpandey.flixster.model.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -55,6 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout container;
         TextView tvTitle;
         TextView tvOverview;
         ImageView ivPoster;
@@ -64,12 +72,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
+            container = itemView.findViewById(R.id.container);
         }
 
-        public void bind(Movie movie) {
+        public void bind(final Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
-            Glide.with(context).load(movie.getPosterPath()).into(ivPoster);
+            String imageUrl;
+            // if photo is in landscape
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                // then imageUrl = back drop image
+                imageUrl = movie.getBackdropPath();
+            } else {
+                //else imageUrl = poster image
+                imageUrl = movie.getPosterPath();
+            }
+            Glide.with(context).load(imageUrl).into(ivPoster);
+            //1. Register click listener on the whole row
+            //2. Navigate to a new activity on tap
+
+            tvTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Goes to a new activity on tap.
+                    Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("movie", Parcels.wrap(movie));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }
