@@ -1,4 +1,4 @@
-package com.codepath.rkpandey.flixster.model;
+package com.codepath.rkpandey.flixster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.rkpandey.flixster.R;
+import com.codepath.rkpandey.flixster.model.Movie;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -17,6 +18,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import okhttp3.Headers;
 
@@ -42,7 +44,7 @@ public class DetailActivity extends YouTubeBaseActivity {
         ratingBar = findViewById(R.id.ratingBar);
         youTubePlayerView = findViewById(R.id.player);
 
-        Movie movie = getIntent().getParcelableExtra("movie");
+        Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
         ratingBar.setRating((float) movie.getRating());
